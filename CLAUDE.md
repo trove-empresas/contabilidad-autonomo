@@ -4,18 +4,35 @@
 
 Las reglas generales de trabajo están en el `CLAUDE.md` del repositorio
 [`trove-empresas/criterio`](https://github.com/trove-empresas/criterio).
-**Esas reglas prevalecen** sobre lo que diga este archivo. Si hay conflicto,
-se sigue `criterio` y se señala la contradicción para corregirla aquí.
+**Esas reglas prevalecen** sobre lo que diga este archivo. Si ves un choque
+entre ambos, no elijas por tu cuenta: pregunta a Gonzalo, como indica
+`criterio`, y señala la contradicción para corregirla aquí.
 
-Este archivo solo añade los principios propios de esta app.
+Este archivo solo añade lo propio de esta app.
+
+## Al empezar cada sesión
+
+1. **Lee primero el `CLAUDE.md` de `trove-empresas/criterio`** (y los
+   procedimientos que cite para la tarea), antes de tocar nada aquí.
+2. Después, este archivo y los documentos de `docs/` que afecten a la tarea.
+
+## De dónde llegan las instrucciones
+
+Las instrucciones llegan como **issues de este repositorio** (plantilla
+«Instrucción», pensada para escribirse desde el móvil). Cada issue se trabaja
+con el procedimiento `procedimientos/trabajar-issue.md` de `criterio`: una
+rama y una pull request por issue, enlazada con «Closes #N».
 
 ## Qué es esta app
 
 App local para que un autónomo en España gestione sus facturas, su IVA y su
 IRPF. Visión y etapas en [`docs/producto.md`](docs/producto.md). Decisiones
-registradas en [`docs/decisiones.md`](docs/decisiones.md). Opciones de
-tecnología en [`docs/propuesta-tecnica.md`](docs/propuesta-tecnica.md)
-(la elección final es de Gonzalo; no se implementa ninguna hasta que decida).
+registradas en [`docs/decisiones.md`](docs/decisiones.md).
+
+**Tecnología (decidida el 2026-09-24):** Python + SQLite + interfaz web local
+con FastAPI, Jinja y htmx. Motivos y alternativas en
+[`docs/propuesta-tecnica.md`](docs/propuesta-tecnica.md). Cualquier cambio de
+tecnología es una decisión nueva de Gonzalo y se registra en `decisiones.md`.
 
 ## Principios de la app
 
@@ -43,6 +60,8 @@ tecnología en [`docs/propuesta-tecnica.md`](docs/propuesta-tecnica.md)
    referencia no se da por buena.
 
 5. **Los datos reales nunca entran en el repositorio.**
-   Facturas, bases de datos locales, exportaciones y credenciales se quedan
-   fuera (ver `.gitignore`). Las pruebas usan exclusivamente facturas
+   Facturas, bases de datos locales, copias de seguridad, exportaciones y
+   credenciales se quedan fuera (ver `.gitignore`). Los datos viven en
+   `datos/`. La clave de API de Anthropic va solo en `.env`, nunca en el
+   código (ver `README.md`). Las pruebas usan exclusivamente facturas
    ficticias, con NIF y datos inventados.

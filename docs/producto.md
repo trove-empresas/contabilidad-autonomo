@@ -28,14 +28,18 @@ cálculos los hace código determinista (ver `CLAUDE.md`).
 
 ### v1 — Facturas y resumen trimestral
 
-- Subida de facturas emitidas y recibidas.
-- Extracción de datos con nivel de confianza.
+- Subida de facturas emitidas y recibidas en PDF con texto, PDF escaneado o
+  foto (JPG, PNG, HEIC). Facturae XML queda para más adelante.
+- Extracción de datos con nivel de confianza (umbral inicial 0,90,
+  configurable).
 - Clasificación a efectos de IVA, con confirmación del usuario para lo dudoso.
 - Resumen trimestral:
   - **Modelo 303** (IVA).
   - **Modelo 130** (pago fraccionado de IRPF), comprobando si el usuario está
     exento de presentarlo porque la mayor parte de sus ingresos ya soporta
     retención.
+- Copia de seguridad local automática de la base de datos en
+  `datos/copias/`.
 
 ### v2 — Consultas
 

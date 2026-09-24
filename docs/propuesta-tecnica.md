@@ -1,7 +1,9 @@
 # Propuesta técnica
 
-> **Estado:** propuesta. No hay nada implementado. La decisión es de Gonzalo;
-> cuando la tome, se registra en [`decisiones.md`](decisiones.md).
+> **Estado: decidida (2026-09-24).** Gonzalo ha elegido la **opción A**
+> (Python + SQLite + web local con FastAPI, Jinja y htmx). La decisión y las
+> de los puntos pendientes están en [`decisiones.md`](decisiones.md). Este
+> documento se conserva como registro de las opciones que se valoraron.
 
 ## Requisitos que condicionan la elección
 
@@ -114,10 +116,16 @@ Si la prioridad fuera una interfaz muy pulida desde el principio, la opción B
 sería la alternativa razonable. La C solo compensa si se quiere distribuir la
 app a otros usuarios como programa instalable.
 
-## Pendiente de decidir (además del stack)
+## Puntos que quedaban pendientes (ya decididos)
 
-- Umbral de confianza a partir del cual una factura requiere confirmación.
-- Formato de entrada admitido en v1 (PDF con texto, PDF escaneado, foto,
-  Facturae XML).
-- Dónde se guardan los datos locales (carpeta `datos/`, ya excluida en
-  `.gitignore`).
+Todos se decidieron el 2026-09-24; el detalle está en
+[`decisiones.md`](decisiones.md):
+
+- **Umbral de confianza:** 0,90, configurable con `UMBRAL_CONFIANZA`, más
+  comprobaciones deterministas que obligan siempre a confirmar. Provisional
+  hasta calibrarlo con facturas reales.
+- **Formatos en v1:** PDF con texto, PDF escaneado y fotos (lectura de
+  imágenes del modelo). Facturae XML, más adelante.
+- **Datos locales:** en `datos/`, con copia de seguridad automática de la
+  base de datos en `datos/copias/`.
+- **Clave de API:** en `.env`, nunca en el código (ver `README.md`).
