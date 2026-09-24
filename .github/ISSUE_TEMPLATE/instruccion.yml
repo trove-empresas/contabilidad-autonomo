@@ -1,0 +1,11 @@
+name: Instrucción
+description: Encargo para Claude, escrito en texto libre (pensado para el móvil).
+title: "Instrucción: "
+body:
+  - type: textarea
+    id: instruccion
+    attributes:
+      label: ¿Qué hay que hacer?
+      description: Escríbelo como te salga. Basta con una frase.
+    validations:
+      required: true

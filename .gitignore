@@ -1,0 +1,52 @@
+# --- Datos reales: nunca entran en el repositorio ---
+datos/
+facturas/
+**/facturas/
+!tests/**/facturas/
+!**/fixtures/**/facturas/
+
+# Documentos de facturas sueltos (las pruebas usan ficticias en tests/ o fixtures/)
+*.pdf
+*.PDF
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.xml
+!tests/**
+!**/fixtures/**
+
+# Bases de datos locales
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.duckdb
+
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+
+# Exportaciones
+exportaciones/
+*.csv
+*.xlsx
+!tests/**/*.csv
+
+# Entorno y herramientas
+.venv/
+venv/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+build/
+.coverage
+htmlcov/
+.pytest_cache/
+.DS_Store
+.idea/
+.vscode/
