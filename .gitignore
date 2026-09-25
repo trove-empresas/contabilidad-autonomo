@@ -44,6 +44,7 @@ __pycache__/
 node_modules/
 dist/
 build/
+*.egg-info/
 .coverage
 htmlcov/
 .pytest_cache/
