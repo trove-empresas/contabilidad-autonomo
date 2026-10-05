@@ -1,0 +1,15 @@
+{
+  "aviso": "PROPUESTAS de un agente, NO validadas por Gonzalo. No son casos_validados/. Todos los datos son ficticios.",
+  "casos": [
+    {"situacion": "Factura recibida de un proveedor español con IVA 21 %", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "21", "nif_contraparte": "12345678Z", "es_servicio": true, "operacion": "sujeta"}, "esperado": "general"},
+    {"situacion": "Factura recibida con IVA 10 %", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "10", "nif_contraparte": "12345678Z", "es_servicio": true, "operacion": "sujeta"}, "esperado": "reducido"},
+    {"situacion": "Factura emitida con IVA 4 %", "entrada": {"tipo": "emitida", "fecha": "2026-03-10", "tipo_iva": "4", "nif_contraparte": "12345678Z", "es_servicio": false, "operacion": "sujeta"}, "esperado": "superreducido"},
+    {"situacion": "Servicio de software recibido de una empresa alemana, sin IVA", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "0", "nif_contraparte": "DE123456789", "es_servicio": true, "operacion": "sujeta"}, "esperado": "isp"},
+    {"situacion": "Servicio recibido de un proveedor de fuera de la UE, sin IVA", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "0", "nif_contraparte": "", "pais_contraparte": "US", "es_servicio": true, "operacion": "sujeta"}, "esperado": "isp"},
+    {"situacion": "Servicio emitido a una empresa francesa, sin IVA", "entrada": {"tipo": "emitida", "fecha": "2026-03-10", "tipo_iva": "0", "nif_contraparte": "FR12345678901", "es_servicio": true, "operacion": "sujeta"}, "esperado": "no_sujeta"},
+    {"situacion": "Servicio exento declarado con su apartado del art. 20", "entrada": {"tipo": "emitida", "fecha": "2026-03-10", "tipo_iva": "0", "nif_contraparte": "12345678Z", "es_servicio": true, "operacion": "exenta", "articulo_exencion": "20.Uno.9º"}, "esperado": "exenta"},
+    {"situacion": "Proveedor alemán que repercute IVA español (incoherente)", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "21", "nif_contraparte": "DE123456789", "es_servicio": true, "operacion": "sujeta"}, "esperado": null},
+    {"situacion": "IVA del 7 % (tipo no cubierto)", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "7", "nif_contraparte": "12345678Z", "es_servicio": true, "operacion": "sujeta"}, "esperado": null},
+    {"situacion": "Compra de bienes a proveedor alemán sin IVA (adquisición intracomunitaria, no cubierta)", "entrada": {"tipo": "recibida", "fecha": "2026-03-10", "tipo_iva": "0", "nif_contraparte": "DE123456789", "es_servicio": false, "operacion": "sujeta"}, "esperado": null}
+  ]
+}
