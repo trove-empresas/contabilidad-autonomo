@@ -1,0 +1,41 @@
+# Rutas protegidas: un cambio que toque alguna NUNCA se fusiona solo;
+# lo fusiona Gonzalo a mano. Una por línea. Las líneas que empiezan por #
+# y las vacías se ignoran.
+#   - Termina en «/»  -> toda la carpeta (y lo que haya dentro).
+#   - Contiene «*»    -> patrón tipo glob (fnmatch; «*» también cruza «/»).
+#   - Otro caso       -> ruta exacta.
+# Cada proyecto AÑADE las suyas (reglas y cálculos fiscales, seguridad...).
+
+# Reglas generales: siempre protegidas
+CLAUDE.md
+.github/
+casos_validados/
+.env
+.env.*
+
+# Seguridad y credenciales
+*secret*
+*credencial*
+*.pem
+*.key
+
+# --- Propias de contabilidad-autonomo ---
+
+# Reglas y cálculos fiscales. El núcleo fiscal irá en src/contabilidad_autonomo/fiscal/;
+# los patrones cubren también archivos sueltos con estos nombres.
+src/contabilidad_autonomo/fiscal/
+*/iva*
+*/irpf*
+*/modelo_*
+*/modelos/*
+*fiscal*
+
+# Datos: esquema de la base de datos, importes, migraciones y copias de seguridad
+src/contabilidad_autonomo/facturas.py
+src/contabilidad_autonomo/copias.py
+*migracion*
+*migrations*
+
+# Seguridad: dependencias (cadena de suministro) y lo que se excluye del repositorio
+pyproject.toml
+.gitignore
