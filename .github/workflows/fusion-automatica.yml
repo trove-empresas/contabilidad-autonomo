@@ -1,0 +1,110 @@
+# Fusión automática de PR de riesgo bajo.
+# Política y ajustes de GitHub: procedimientos/fusion-automatica.md de
+# trove-empresas/criterio. La decisión la toma .github/scripts/comprobar_fusion.py
+# (código determinista con pruebas), nunca el agente.
+#
+# Seguridad:
+# - «pull_request_target» ejecuta SIEMPRE este archivo y el script tal como
+#   están en la rama principal, nunca la versión de la PR: una PR no puede
+#   cambiar las reglas con las que se juzga a sí misma.
+# - No se descarga ni se ejecuta código de la PR. Su descripción y su lista
+#   de archivos se leen de la API de GitHub y se tratan como datos.
+# - Este workflow solo ACTIVA la fusión automática. Quien fusiona es GitHub,
+#   y solo cuando pasan todas las comprobaciones obligatorias de la
+#   protección de la rama principal.
+# - Si la PR deja de ser elegible (nuevo commit, cambio de descripción…),
+#   se desactiva la fusión automática antes de volver a evaluar.
+
+name: Fusión automática
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened, ready_for_review, converted_to_draft]
+    branches: [main]
+
+permissions:
+  contents: write        # necesario para que GitHub fusione la PR
+  pull-requests: write   # necesario para activar/desactivar la fusión automática
+
+concurrency:
+  group: fusion-automatica-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  evaluar:
+    name: Evaluar fusión automática
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar la rama principal (no el código de la PR)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          persist-credentials: false
+
+      - name: Comprobar que el script de decisión pasa sus pruebas
+        working-directory: .github/scripts
+        run: python3 -m unittest -v
+
+      - name: Desactivar la fusión automática mientras se evalúa
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: gh pr merge "$PR" --repo "$REPO" --disable-auto || true
+
+      - name: Leer la PR desde la API
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$REPO/pulls/$PR" > pr.json
+          jq -r '.body // ""' pr.json > cuerpo.md
+          gh api --paginate "repos/$REPO/pulls/$PR/files" \
+            --jq '.[] | .filename, (.previous_filename // empty)' > archivos.txt
+          echo "sha=$(jq -r '.head.sha' pr.json)" >> "$GITHUB_OUTPUT"
+          echo "borrador=$(jq -r '.draft' pr.json)" >> "$GITHUB_OUTPUT"
+          echo "estado=$(jq -r '.state' pr.json)" >> "$GITHUB_OUTPUT"
+          echo "num_archivos=$(jq -r '.changed_files' pr.json)" >> "$GITHUB_OUTPUT"
+          echo "repo_origen=$(jq -r '.head.repo.full_name // ""' pr.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Decidir con el script
+        id: decision
+        env:
+          BORRADOR: ${{ steps.pr.outputs.borrador }}
+          ESTADO: ${{ steps.pr.outputs.estado }}
+          NUM_ARCHIVOS: ${{ steps.pr.outputs.num_archivos }}
+          REPO_ORIGEN: ${{ steps.pr.outputs.repo_origen }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -uo pipefail
+          if [ "$ESTADO" != "open" ]; then
+            motivo="NO ELEGIBLE: la PR no está abierta"
+          elif [ "$BORRADOR" != "false" ]; then
+            motivo="NO ELEGIBLE: la PR es un borrador"
+          elif [ "$REPO_ORIGEN" != "$REPO" ]; then
+            motivo="NO ELEGIBLE: la PR viene de otro repositorio (fork)"
+          elif [ "$NUM_ARCHIVOS" -ge 3000 ]; then
+            motivo="NO ELEGIBLE: demasiados archivos para listarlos todos"
+          else
+            motivo=$(python3 .github/scripts/comprobar_fusion.py \
+              .github/rutas-protegidas.txt archivos.txt cuerpo.md)
+          fi
+          echo "$motivo"
+          echo "### Fusión automática: $motivo" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$motivo" = "ELEGIBLE" ]; then
+            echo "elegible=si" >> "$GITHUB_OUTPUT"
+          else
+            echo "elegible=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Activar la fusión automática (GitHub espera a las comprobaciones)
+        if: steps.decision.outputs.elegible == 'si'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ steps.pr.outputs.sha }}
+        run: gh pr merge "$PR" --repo "$REPO" --auto --squash --match-head-commit "$SHA"
