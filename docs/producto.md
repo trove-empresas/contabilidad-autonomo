@@ -36,8 +36,8 @@ cálculos los hace código determinista (ver `CLAUDE.md`).
 - Resumen trimestral:
   - **Modelo 303** (IVA).
   - **Modelo 130** (pago fraccionado de IRPF), comprobando si el usuario está
-    exento de presentarlo porque la mayor parte de sus ingresos ya soporta
-    retención.
+    exento de presentarlo porque al menos el 70 % de sus ingresos del año
+    anterior llevó retención (art. 109 del Reglamento del IRPF).
 - Copia de seguridad local automática de la base de datos en
   `datos/copias/`.
 
