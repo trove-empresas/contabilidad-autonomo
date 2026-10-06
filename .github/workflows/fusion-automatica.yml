@@ -12,8 +12,13 @@
 # - Este workflow solo ACTIVA la fusión automática. Quien fusiona es GitHub,
 #   y solo cuando pasan todas las comprobaciones obligatorias de la
 #   protección de la rama principal.
-# - Si la PR deja de ser elegible (nuevo commit, cambio de descripción…),
-#   se desactiva la fusión automática antes de volver a evaluar.
+# - Si la fusión automática la activó este workflow, se desactiva antes de
+#   volver a evaluar (nuevo commit, cambio de descripción…). Si la activó una
+#   persona a mano, no se toca.
+# - Resultado: verde cuando decide (también si la PR NO es elegible: eso
+#   significa «requiere fusión manual de Gonzalo», con el motivo en el resumen
+#   de la ejecución). Rojo solo si algo ha ido mal.
+#   Toda la lógica está en .github/scripts/evaluar_fusion.sh, con pruebas.
 
 name: Fusión automática
 
@@ -45,66 +50,9 @@ jobs:
         working-directory: .github/scripts
         run: python3 -m unittest -v
 
-      - name: Desactivar la fusión automática mientras se evalúa
+      - name: Evaluar la PR y, si es elegible, activar la fusión automática
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
-        run: gh pr merge "$PR" --repo "$REPO" --disable-auto || true
-
-      - name: Leer la PR desde la API
-        id: pr
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-        run: |
-          set -euo pipefail
-          gh api "repos/$REPO/pulls/$PR" > pr.json
-          jq -r '.body // ""' pr.json > cuerpo.md
-          gh api --paginate "repos/$REPO/pulls/$PR/files" \
-            --jq '.[] | .filename, (.previous_filename // empty)' > archivos.txt
-          echo "sha=$(jq -r '.head.sha' pr.json)" >> "$GITHUB_OUTPUT"
-          echo "borrador=$(jq -r '.draft' pr.json)" >> "$GITHUB_OUTPUT"
-          echo "estado=$(jq -r '.state' pr.json)" >> "$GITHUB_OUTPUT"
-          echo "num_archivos=$(jq -r '.changed_files' pr.json)" >> "$GITHUB_OUTPUT"
-          echo "repo_origen=$(jq -r '.head.repo.full_name // ""' pr.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Decidir con el script
-        id: decision
-        env:
-          BORRADOR: ${{ steps.pr.outputs.borrador }}
-          ESTADO: ${{ steps.pr.outputs.estado }}
-          NUM_ARCHIVOS: ${{ steps.pr.outputs.num_archivos }}
-          REPO_ORIGEN: ${{ steps.pr.outputs.repo_origen }}
-          REPO: ${{ github.repository }}
-        run: |
-          set -uo pipefail
-          if [ "$ESTADO" != "open" ]; then
-            motivo="NO ELEGIBLE: la PR no está abierta"
-          elif [ "$BORRADOR" != "false" ]; then
-            motivo="NO ELEGIBLE: la PR es un borrador"
-          elif [ "$REPO_ORIGEN" != "$REPO" ]; then
-            motivo="NO ELEGIBLE: la PR viene de otro repositorio (fork)"
-          elif [ "$NUM_ARCHIVOS" -ge 3000 ]; then
-            motivo="NO ELEGIBLE: demasiados archivos para listarlos todos"
-          else
-            motivo=$(python3 .github/scripts/comprobar_fusion.py \
-              .github/rutas-protegidas.txt archivos.txt cuerpo.md)
-          fi
-          echo "$motivo"
-          echo "### Fusión automática: $motivo" >> "$GITHUB_STEP_SUMMARY"
-          if [ "$motivo" = "ELEGIBLE" ]; then
-            echo "elegible=si" >> "$GITHUB_OUTPUT"
-          else
-            echo "elegible=no" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Activar la fusión automática (GitHub espera a las comprobaciones)
-        if: steps.decision.outputs.elegible == 'si'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          SHA: ${{ steps.pr.outputs.sha }}
-        run: gh pr merge "$PR" --repo "$REPO" --auto --squash --match-head-commit "$SHA"
+        run: bash .github/scripts/evaluar_fusion.sh
