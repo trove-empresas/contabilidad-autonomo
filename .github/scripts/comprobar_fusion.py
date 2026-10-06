@@ -42,11 +42,21 @@ def es_protegida(ruta, patrones):
     return False
 
 
+def patrones_mal_escritos(patrones):
+    """Rutas con comodín y «/» final (p. ej. «*/modelos/»): se leerían como
+    carpeta literal y no protegerían nada. Hay que escribirlas «*/modelos/*»."""
+    return [p for p in patrones if p.endswith("/") and ("*" in p or "?" in p)]
+
+
 def evaluar(patrones, archivos, cuerpo):
     if not archivos:
         return False, "no hay archivos cambiados"
     if not patrones:
         return False, "no hay rutas protegidas declaradas"
+    malos = patrones_mal_escritos(patrones)
+    if malos:
+        return False, ("rutas protegidas mal escritas (comodín con «/» final; "
+                       "usa p. ej. «*/carpeta/*»): " + ", ".join(malos))
     if riesgo_declarado(cuerpo) != "bajo":
         return False, "la descripción no declara «Riesgo: bajo» de forma inequívoca"
     tocadas = [a for a in archivos if es_protegida(a, patrones)]

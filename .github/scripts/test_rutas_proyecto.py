@@ -2,12 +2,15 @@
 import pathlib
 import unittest
 
-from comprobar_fusion import cargar_lineas, es_protegida
+from comprobar_fusion import cargar_lineas, es_protegida, patrones_mal_escritos
 
 RUTAS = cargar_lineas((pathlib.Path(__file__).parent.parent / "rutas-protegidas.txt").read_text(encoding="utf-8"))
 
 
 class RutasProyecto(unittest.TestCase):
+    def test_ninguna_ruta_mal_escrita(self):
+        self.assertEqual(patrones_mal_escritos(RUTAS), [])
+
     def test_protegidas(self):
         for r in [
             # generales
