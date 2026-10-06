@@ -59,3 +59,5 @@ Todo se guarda en la carpeta `datos/` (base de datos, facturas subidas y
 copias de seguridad en `datos/copias/`). Está excluida del repositorio. Las
 copias están en el mismo disco que la base de datos: para protegerte de una
 avería del equipo, copia de vez en cuando `datos/` a otro soporte.
+
+<!-- PRUEBA de la fusión automática (#20). No fusionar: se cerrará. -->
