@@ -27,8 +27,7 @@ Límites conocidos (se anotan para que no sorprendan):
   y la factura queda pendiente (se prefiere confirmar de más).
 * Los NIF que empiezan por K, L o M se aceptan si cuadran con cualquiera de
   las dos formas de control del CIF (dígito o letra).
-* Los nombres de clasificación especial son provisionales hasta que la
-  issue #11 fije los definitivos.
+* Los nombres de clasificación especial vienen de ``clasificacion_iva``.
 """
 
 from __future__ import annotations
@@ -39,6 +38,7 @@ import sqlite3
 from collections.abc import Iterable
 from decimal import Decimal, InvalidOperation
 
+from contabilidad_autonomo.clasificacion_iva import ESPECIALES
 from contabilidad_autonomo.facturas import (
     CONFIRMADA,
     EMITIDA,
@@ -48,8 +48,8 @@ from contabilidad_autonomo.facturas import (
 
 UMBRAL_POR_DEFECTO = Decimal("0.90")
 
-# Provisional: la issue #11 definirá los nombres definitivos de clasificación.
-CLASIFICACIONES_ESPECIALES = frozenset({"exenta", "no_sujeta", "isp"})
+# Nombres definidos en clasificacion_iva (issue #11).
+CLASIFICACIONES_ESPECIALES = ESPECIALES
 
 _LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE"
 _LETRAS_CIF = "JABCDEFGHI"
