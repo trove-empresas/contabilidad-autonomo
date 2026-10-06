@@ -1,6 +1,8 @@
+import pathlib
+import tempfile
 import unittest
 
-from comprobar_fusion import es_protegida, evaluar, riesgo_declarado
+from comprobar_fusion import es_protegida, main, evaluar, patrones_mal_escritos, riesgo_declarado
 
 P = ["CLAUDE.md", ".github/", "casos_validados/", ".env.*", "*secret*", "src/fiscal/"]
 BAJO = "## Para Gonzalo\n- **Riesgo:** bajo — texto\n"
@@ -44,6 +46,42 @@ class Evaluar(unittest.TestCase):
     def test_sin_archivos_o_sin_rutas(self):
         self.assertFalse(evaluar(P, [], BAJO)[0])
         self.assertFalse(evaluar([], ["a.py"], BAJO)[0])
+
+
+class PatronesMalEscritos(unittest.TestCase):
+    """Una ruta como «*/modelos/» no protegería nada: debe ser un error."""
+
+    def test_detecta_comodin_con_barra_final(self):
+        self.assertEqual(patrones_mal_escritos(["CLAUDE.md", "*/modelos/", "src/*/"]),
+                         ["*/modelos/", "src/*/"])
+        self.assertEqual(patrones_mal_escritos(["a?/"]), ["a?/"])
+
+    def test_rutas_correctas_no_se_marcan(self):
+        self.assertEqual(patrones_mal_escritos(P + ["*/modelos/*", "./src/x/"]), [])
+
+    def test_evaluar_no_es_elegible_con_un_patron_mal_escrito(self):
+        ok, m = evaluar(P + ["*/modelos/"], ["src/ui/a.py"], BAJO)
+        self.assertFalse(ok)
+        self.assertIn("*/modelos/", m)
+
+
+class CodigoDeSalida(unittest.TestCase):
+    """0 = elegible, 1 = no elegible (decisión normal), 2 = error al comprobar."""
+
+    def archivos(self, rutas, cambiados, cuerpo):
+        d = pathlib.Path(tempfile.mkdtemp())
+        for nombre, texto in [("r.txt", rutas), ("a.txt", cambiados), ("c.md", cuerpo)]:
+            (d / nombre).write_text(texto, encoding="utf-8")
+        return ["x", str(d / "r.txt"), str(d / "a.txt"), str(d / "c.md")]
+
+    def test_elegible_0(self):
+        self.assertEqual(main(self.archivos("CLAUDE.md\n", "README.md\n", BAJO)), 0)
+
+    def test_no_elegible_1(self):
+        self.assertEqual(main(self.archivos("CLAUDE.md\n", "CLAUDE.md\n", BAJO)), 1)
+
+    def test_error_2(self):
+        self.assertEqual(main(["x", "/no/existe", "/no/existe", "/no/existe"]), 2)
 
 
 if __name__ == "__main__":

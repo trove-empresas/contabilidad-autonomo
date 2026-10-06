@@ -2,12 +2,15 @@
 import pathlib
 import unittest
 
-from comprobar_fusion import cargar_lineas, es_protegida
+from comprobar_fusion import cargar_lineas, es_protegida, patrones_mal_escritos
 
 RUTAS = cargar_lineas((pathlib.Path(__file__).parent.parent / "rutas-protegidas.txt").read_text(encoding="utf-8"))
 
 
 class RutasProyecto(unittest.TestCase):
+    def test_ninguna_ruta_mal_escrita(self):
+        self.assertEqual(patrones_mal_escritos(RUTAS), [])
+
     def test_protegidas(self):
         for r in [
             # generales
@@ -23,6 +26,35 @@ class RutasProyecto(unittest.TestCase):
             "src/contabilidad_autonomo/migraciones/0002.sql",
             # seguridad
             "pyproject.toml", ".gitignore",
+        ]:
+            self.assertTrue(es_protegida(r, RUTAS), r)
+
+    def test_reglas_y_calculos_fiscales_protegidos(self):
+        """Issue #23: archivos fiscales que antes se escapaban, y nombres futuros."""
+        for r in [
+            # actuales (antes NO protegidos)
+            "src/contabilidad_autonomo/clasificacion_iva.py",
+            "src/contabilidad_autonomo/pendientes.py",
+            "tests/nucleo/test_clasificacion_iva.py",
+            "tests/nucleo/test_pendientes.py",
+            "docs/casos_propuestos/clasificacion_iva.json",
+            # futuros: modelos y cálculos, en la raíz del paquete o en carpetas
+            "src/contabilidad_autonomo/modelo_303.py",
+            "src/contabilidad_autonomo/modelo303.py",
+            "src/contabilidad_autonomo/m303.py",
+            "src/contabilidad_autonomo/modelo_130.py",
+            "src/contabilidad_autonomo/resumen_trimestral.py",
+            "src/contabilidad_autonomo/acumulados.py",
+            "src/contabilidad_autonomo/calculo_iva.py",
+            "src/contabilidad_autonomo/retenciones.py",
+            "src/contabilidad_autonomo/exencion_130.py",
+            "src/contabilidad_autonomo/inversion_sujeto_pasivo.py",
+            "src/contabilidad_autonomo/tipos_iva.py",
+            "src/contabilidad_autonomo/IVA_soportado.py",
+            "src/contabilidad_autonomo/nucleo/iva.py",
+            "iva.py",
+            "src/contabilidad_autonomo/web/rutas/resumen_trimestral.py",
+            "tests/nucleo/test_modelo_303.py",
         ]:
             self.assertTrue(es_protegida(r, RUTAS), r)
 

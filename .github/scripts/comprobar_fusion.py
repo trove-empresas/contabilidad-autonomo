@@ -8,6 +8,9 @@ Reglas (procedimientos/fusion-automatica.md de `criterio`):
 
 Uso: comprobar_fusion.py <rutas-protegidas.txt> <archivos.txt> <cuerpo.md>
 Salida: «ELEGIBLE» (código 0) o «NO ELEGIBLE: motivo» (código 1).
+Si no se puede comprobar (archivo que falta, etc.), «NO ELEGIBLE: error…»
+con código 2, para que el workflow lo marque en rojo: «no elegible» es una
+decisión normal; un error, no.
 Ante cualquier duda o error, no es elegible.
 """
 import fnmatch
@@ -42,11 +45,21 @@ def es_protegida(ruta, patrones):
     return False
 
 
+def patrones_mal_escritos(patrones):
+    """Rutas con comodín y «/» final (p. ej. «*/modelos/»): se leerían como
+    carpeta literal y no protegerían nada. Hay que escribirlas «*/modelos/*»."""
+    return [p for p in patrones if p.endswith("/") and ("*" in p or "?" in p)]
+
+
 def evaluar(patrones, archivos, cuerpo):
     if not archivos:
         return False, "no hay archivos cambiados"
     if not patrones:
         return False, "no hay rutas protegidas declaradas"
+    malos = patrones_mal_escritos(patrones)
+    if malos:
+        return False, ("rutas protegidas mal escritas (comodín con «/» final; "
+                       "usa p. ej. «*/carpeta/*»): " + ", ".join(malos))
     if riesgo_declarado(cuerpo) != "bajo":
         return False, "la descripción no declara «Riesgo: bajo» de forma inequívoca"
     tocadas = [a for a in archivos if es_protegida(a, patrones)]
@@ -62,7 +75,8 @@ def main(argv):
         cuerpo = open(argv[3], encoding="utf-8").read()
         ok, motivo = evaluar(patrones, archivos, cuerpo)
     except Exception as e:  # noqa: BLE001 - ante error, nunca elegible
-        ok, motivo = False, f"error al comprobar: {e}"
+        print(f"NO ELEGIBLE: error al comprobar: {e}")
+        return 2
     print("ELEGIBLE" if ok else f"NO ELEGIBLE: {motivo}")
     return 0 if ok else 1
 

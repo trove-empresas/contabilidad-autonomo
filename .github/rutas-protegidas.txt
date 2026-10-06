@@ -21,14 +21,50 @@ casos_validados/
 
 # --- Propias de contabilidad-autonomo ---
 
-# Reglas y cálculos fiscales. El núcleo fiscal irá en src/contabilidad_autonomo/fiscal/;
-# los patrones cubren también archivos sueltos con estos nombres.
+# Reglas y cálculos fiscales (issue #23). Tres capas:
+#   1. Archivos actuales, por ruta exacta (no dependen de ningún patrón).
+#   2. Patrones por nombre para archivos futuros. «*» cruza «/» y no distingue
+#      mayúsculas: «*iva*» casaría con «archivador», por eso «iva» va pegado a
+#      «/», «_», «-» o «.»; los demás términos son lo bastante específicos.
+#      Ante la duda se protege de más: el coste es solo una fusión manual.
+#   3. tests/nucleo/test_rutas_fiscales_protegidas.py (en el CI): falla si un
+#      archivo cita normativa fiscal y no está protegido, se llame como se llame.
+
+# 1. Actuales
+src/contabilidad_autonomo/clasificacion_iva.py
+src/contabilidad_autonomo/pendientes.py
+docs/casos_propuestos/
 src/contabilidad_autonomo/fiscal/
+
+# 2. Por nombre, en cualquier carpeta
+iva*
 */iva*
-*/irpf*
-*/modelo_*
-*/modelos/*
+*_iva*
+*-iva*
+*.iva*
+*irpf*
 *fiscal*
+*tribut*
+*impuesto*
+*modelo*
+*m303*
+*303*
+*130*
+*390*
+*347*
+*retencion*
+*clasificacion*
+*pendiente*
+*calculo*
+*acumulad*
+*trimestr*
+*liquidacion*
+*exencion*
+*exent*
+*sujeto_pasivo*
+*prorrata*
+*deducib*
+*amortiz*
 
 # Datos: esquema de la base de datos, importes, migraciones y copias de seguridad
 src/contabilidad_autonomo/facturas.py
