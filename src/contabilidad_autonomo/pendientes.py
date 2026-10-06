@@ -1,3 +1,4 @@
+# PRUEBA de la fusión automática (#20). No fusionar: se cerrará.
 """Reglas deterministas que dejan una factura pendiente (v1, issue #10).
 
 Implementa la decisión «Umbral de confianza inicial: 0,90» de
