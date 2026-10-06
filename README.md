@@ -4,7 +4,9 @@ App local para que un autónomo en España gestione sus facturas, su IVA y su
 IRPF: sube facturas, extrae sus datos, las clasifica a efectos de IVA y
 prepara los resúmenes trimestrales (modelos 303 y 130).
 
-> **Estado:** en preparación. Todavía no hay código de la app.
+> **Estado:** en construcción. Todavía no hay interfaz ni app que abrir;
+> existe el núcleo (copias de seguridad, facturas y reglas de pendiente),
+> con sus pruebas.
 
 - Visión y etapas: [`docs/producto.md`](docs/producto.md)
 - Decisiones: [`docs/decisiones.md`](docs/decisiones.md)
