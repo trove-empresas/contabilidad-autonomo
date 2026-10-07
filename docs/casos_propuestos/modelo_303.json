@@ -1,0 +1,679 @@
+{
+ "aviso": "PROPUESTAS de un agente, NO validadas por Gonzalo. No son casos_validados/. Todos los datos son ficticios. Titular: NIF 87654321X; trimestre 2T de 2026 salvo que se indique otra fecha.",
+ "titular_nif": "87654321X",
+ "anio": 2026,
+ "trimestre": 2,
+ "casos": [
+  {
+   "situacion": "Una factura emitida al 21 %",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "0",
+    "resultado": "210.00",
+    "devengado_por_tipo": [
+     {
+      "tipo_iva": "21",
+      "base": "1000.00",
+      "cuota": "210.00"
+     }
+    ]
+   }
+  },
+  {
+   "situacion": "Emitidas al 21 % y al 10 % en el mismo trimestre",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    },
+    {
+     "id": 2,
+     "tipo": "emitida",
+     "fecha": "2026-05-02",
+     "clasificacion_iva": "reducido",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "500.00",
+       "10",
+       "50.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "260.00",
+    "total_deducible": "0",
+    "resultado": "260.00",
+    "devengado_por_tipo": [
+     {
+      "tipo_iva": "21",
+      "base": "1000.00",
+      "cuota": "210.00"
+     },
+     {
+      "tipo_iva": "10",
+      "base": "500.00",
+      "cuota": "50.00"
+     }
+    ]
+   }
+  },
+  {
+   "situacion": "Emitida 1000/210 y recibida a mi nombre, afecta al 100 %: resultado = 210 − 42",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    },
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-05-10",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "200.00",
+       "21",
+       "42.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "42.00",
+    "resultado": "168.00",
+    "no_deducidas": []
+   }
+  },
+  {
+   "situacion": "Ticket (simplificada) sin mis datos: no deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total",
+     "simplificada": true
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "resultado": "0",
+    "no_deducidas": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "Factura a nombre de otra persona: no deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "no_deducidas": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "Simplificada con mis datos y la cuota desglosada: deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total",
+     "simplificada": true
+    }
+   },
+   "esperado": {
+    "total_deducible": "21.00",
+    "resultado": "-21.00",
+    "no_deducidas": []
+   }
+  },
+  {
+   "situacion": "Simplificada con mis datos pero sin cuota desglosada: no deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "121.00",
+       "21",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total",
+     "simplificada": true
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "no_deducidas": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "Vehículo de turismo: se presume afecto el 50 % (cuota 21,00 → 10,50)",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "vehiculo_50"
+    }
+   },
+   "esperado": {
+    "total_deducible": "10.50",
+    "resultado": "-10.50"
+   }
+  },
+  {
+   "situacion": "Gasto no afecto a la actividad: no deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "ninguna"
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "no_deducidas": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "Recibida sin indicar si está afecta: queda pendiente y no suma",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "100.00",
+       "21",
+       "21.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_deducible": "0",
+    "pendientes": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "Servicio de software de una empresa alemana (ISP), afecto: devenga 210 y deduce 210",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "210.00",
+    "resultado": "0.00",
+    "base_isp": "1000.00",
+    "cuota_isp": "210.00"
+   }
+  },
+  {
+   "situacion": "ISP no afecta a la actividad: devenga 210 y no deduce",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "ninguna"
+    }
+   },
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "0",
+    "resultado": "210.00"
+   }
+  },
+  {
+   "situacion": "ISP sin declarar afectación: pendiente, no suma",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "0",
+    "total_deducible": "0",
+    "pendientes": [
+     2
+    ]
+   }
+  },
+  {
+   "situacion": "ISP con otro tipo (10 %) indicado por el usuario",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_devengado": "100.00",
+    "total_deducible": "100.00",
+    "resultado": "0.00"
+   },
+   "tipo_isp": "10"
+  },
+  {
+   "situacion": "Emitida pendiente de confirmar: no suma",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "pendiente",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "0",
+    "resultado": "0",
+    "pendientes": [
+     1
+    ],
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "Factura de otro trimestre: se ignora",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-07-01",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    },
+    {
+     "id": 3,
+     "tipo": "emitida",
+     "fecha": "2026-03-31",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "0",
+    "pendientes": [],
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "Emitida exenta y emitida a empresa francesa (no sujeta): no devengan, solo se informan las bases",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "exenta",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "300.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    },
+    {
+     "id": 2,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "no_sujeta_loc_ue",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "FR12345678901",
+     "lineas": [
+      [
+       "700.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "0",
+    "base_exenta_emitida": "300.00",
+    "base_no_sujeta_emitida": "700.00",
+    "resultado": "0"
+   }
+  },
+  {
+   "situacion": "Factura rectificativa (importes negativos) resta",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    },
+    {
+     "id": 2,
+     "tipo": "emitida",
+     "fecha": "2026-05-02",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "-200.00",
+       "21",
+       "-42.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "esperado": {
+    "total_devengado": "168.00",
+    "resultado": "168.00"
+   }
+  },
+  {
+   "situacion": "Redondeo al céntimo, mitad hacia arriba: 0,05 al 50 % → 0,03",
+   "facturas": [
+    {
+     "id": 2,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "0.24",
+       "21",
+       "0.05"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "2": {
+     "afectacion": "vehiculo_50"
+    }
+   },
+   "esperado": {
+    "total_deducible": "0.03"
+   }
+  }
+ ]
+}
