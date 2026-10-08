@@ -125,3 +125,53 @@ cambia, se añade una nueva que la sustituye y se indica en ambas.
   - App de escritorio con Tauri (Rust): dos lenguajes y mantenimiento más
     costoso; el instalador no aporta mucho a un único usuario.
 - **Estado:** vigente.
+
+## 2026-10-07 — Modelo 303: requisitos de deducción y supuestos del cálculo (issue #12)
+
+- **Decisión (propuesta del agente, pendiente de validar por Gonzalo):** el
+  cálculo del 303 (`modelo_303.py`) aplica los requisitos que Gonzalo indicó
+  en la issue #12, contrastados con el BOE el 2026-10-07: factura a nombre del
+  titular con su NIF (art. 97 LIVA) o simplificada con sus datos y cuota
+  desglosada (art. 7.2 del RD 1619/2012); gasto afecto a la actividad (art.
+  95.Uno); vehículos al 50 % (art. 95.Tres.2ª).
+- **Supuestos que hay que confirmar:** (1) la inversión del sujeto pasivo se
+  calcula al 21 % salvo que se indique otro tipo; (2) en la ISP no se exige el
+  NIF del titular (art. 97.Uno.4º admite justificante contable); (3) redondeo
+  al céntimo, mitad hacia arriba; (4) la afectación y si la factura es
+  simplificada las declara el usuario por factura: si falta, la factura queda
+  pendiente y no suma; (5) la fecha de la factura es la de devengo y deducción.
+- **Estado:** pendiente de validación. Los casos están en
+  `docs/casos_propuestos/modelo_303.json`, no en `casos_validados/`.
+
+### Revisión de Gonzalo sobre los supuestos (PR #26, 2026-10-07)
+
+Aplicada en la misma PR. Sigue pendiente de validación.
+
+1. **ISP al 21 %:** vale como valor por defecto, pero el tipo se puede indicar
+   por factura (`DatosDeduccion.tipo_isp`). Solo se admiten 21, 10 y 4 %; con
+   otro valor la factura queda **pendiente**.
+2. **ISP sin NIF del titular en la factura:** vale, pero la factura debe constar
+   a nombre del titular o de su negocio (`nifs_negocio`); si no, **pendiente**.
+   Decisión del agente: sin NIF coincidente → pendiente (aún no se compara el
+   nombre, porque la app no guarda el nombre del titular).
+3. **Redondeo:** se usa la cuota que figura en cada factura, sin recalcular. Solo
+   se calcula y redondea (céntimo, mitad hacia arriba, factura a factura) la
+   cuota de la ISP. **A confirmar por Gonzalo:** también redondeo la parte
+   deducible cuando la afectación no es total (p. ej. el 50 % de un vehículo)
+   para no dejar fracciones de céntimo; si prefiere otra cosa, se cambia.
+4. **Fecha de devengo:** la de la factura por defecto, corregible por factura
+   (`fechas_devengo`). **Facturas que llegan tarde** (art. 99 LIVA, contrastado
+   en el BOE el 2026-10-07): el IVA soportado se entiende soportado al recibir
+   la factura (99.Cuatro; si el devengo es posterior, al devengarse) y puede
+   deducirse en ese trimestre o en los siguientes, dentro de 4 años desde que
+   nace el derecho (98.Uno, 99.Tres; caduca según art. 100). Propuesta:
+   - Por defecto, una recibida entra en el trimestre de su recepción
+     (`fecha_recepcion`, por defecto la de la factura).
+   - Si no se dedujo entonces, solo entra en un trimestre posterior si el
+     usuario lo elige (`deducir_en`); queda marcada en `de_periodos_anteriores`.
+     Nunca entra sola, para no alterar declaraciones ya presentadas.
+   - Pasados 4 años (comparado con el **final** del trimestre, más estricto que
+     la fecha real de presentación) no deduce y sale en `no_deducidas`.
+   - Elegir un trimestre anterior a la recepción: **pendiente**.
+5. **Afectación:** debe guardarse en la base de datos antes de cerrar la v1.
+   Issue creada: ver el enlace en la PR #26. Mientras tanto se pasa en memoria.
