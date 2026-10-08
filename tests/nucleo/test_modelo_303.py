@@ -28,9 +28,24 @@ def _factura(d: dict) -> Factura:
         clasificacion_iva=d["clasificacion_iva"], estado=d["estado"], id=d["id"])
 
 
+def _datos(v: dict) -> m.DatosDeduccion:
+    v = dict(v)
+    if "tipo_isp" in v:
+        v["tipo_isp"] = D(v["tipo_isp"])
+    if "fecha_recepcion" in v:
+        v["fecha_recepcion"] = date.fromisoformat(v["fecha_recepcion"])
+    if "deducir_en" in v:
+        v["deducir_en"] = tuple(v["deducir_en"])
+    return m.DatosDeduccion(**v)
+
+
 def _calcular(caso: dict) -> m.Resultado303:
-    ded = {int(k): m.DatosDeduccion(**v) for k, v in caso["deducciones"].items()}
+    ded = {int(k): _datos(v) for k, v in caso["deducciones"].items()}
     extra = {"tipo_isp": D(caso["tipo_isp"])} if "tipo_isp" in caso else {}
+    if "fechas_devengo" in caso:
+        extra["fechas_devengo"] = {int(k): date.fromisoformat(v) for k, v in caso["fechas_devengo"].items()}
+    if "nifs_negocio" in caso:
+        extra["nifs_negocio"] = caso["nifs_negocio"]
     return m.calcular_303([_factura(f) for f in caso["facturas"]], PROPUESTAS["anio"],
                           PROPUESTAS["trimestre"], PROPUESTAS["titular_nif"], ded, **extra)
 
@@ -51,6 +66,8 @@ def test_casos_propuestos(caso):
         assert [x.factura_id for x in r.no_deducidas] == esp["no_deducidas"]
     if "pendientes" in esp:
         assert [x.factura_id for x in r.pendientes] == esp["pendientes"]
+    if "de_periodos_anteriores" in esp:
+        assert list(r.de_periodos_anteriores) == esp["de_periodos_anteriores"]
     if "facturas_incluidas" in esp:
         assert list(r.facturas_incluidas) == esp["facturas_incluidas"]
     # Las pendientes nunca se incluyen, y nada se incluye dos veces.

@@ -142,3 +142,36 @@ cambia, se añade una nueva que la sustituye y se indica en ambas.
   pendiente y no suma; (5) la fecha de la factura es la de devengo y deducción.
 - **Estado:** pendiente de validación. Los casos están en
   `docs/casos_propuestos/modelo_303.json`, no en `casos_validados/`.
+
+### Revisión de Gonzalo sobre los supuestos (PR #26, 2026-10-07)
+
+Aplicada en la misma PR. Sigue pendiente de validación.
+
+1. **ISP al 21 %:** vale como valor por defecto, pero el tipo se puede indicar
+   por factura (`DatosDeduccion.tipo_isp`). Solo se admiten 21, 10 y 4 %; con
+   otro valor la factura queda **pendiente**.
+2. **ISP sin NIF del titular en la factura:** vale, pero la factura debe constar
+   a nombre del titular o de su negocio (`nifs_negocio`); si no, **pendiente**.
+   Decisión del agente: sin NIF coincidente → pendiente (aún no se compara el
+   nombre, porque la app no guarda el nombre del titular).
+3. **Redondeo:** se usa la cuota que figura en cada factura, sin recalcular. Solo
+   se calcula y redondea (céntimo, mitad hacia arriba, factura a factura) la
+   cuota de la ISP. **A confirmar por Gonzalo:** también redondeo la parte
+   deducible cuando la afectación no es total (p. ej. el 50 % de un vehículo)
+   para no dejar fracciones de céntimo; si prefiere otra cosa, se cambia.
+4. **Fecha de devengo:** la de la factura por defecto, corregible por factura
+   (`fechas_devengo`). **Facturas que llegan tarde** (art. 99 LIVA, contrastado
+   en el BOE el 2026-10-07): el IVA soportado se entiende soportado al recibir
+   la factura (99.Cuatro; si el devengo es posterior, al devengarse) y puede
+   deducirse en ese trimestre o en los siguientes, dentro de 4 años desde que
+   nace el derecho (98.Uno, 99.Tres; caduca según art. 100). Propuesta:
+   - Por defecto, una recibida entra en el trimestre de su recepción
+     (`fecha_recepcion`, por defecto la de la factura).
+   - Si no se dedujo entonces, solo entra en un trimestre posterior si el
+     usuario lo elige (`deducir_en`); queda marcada en `de_periodos_anteriores`.
+     Nunca entra sola, para no alterar declaraciones ya presentadas.
+   - Pasados 4 años (comparado con el **final** del trimestre, más estricto que
+     la fecha real de presentación) no deduce y sale en `no_deducidas`.
+   - Elegir un trimestre anterior a la recepción: **pendiente**.
+5. **Afectación:** debe guardarse en la base de datos antes de cerrar la v1.
+   Issue creada: ver el enlace en la PR #26. Mientras tanto se pasa en memoria.

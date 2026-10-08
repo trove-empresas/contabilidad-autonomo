@@ -674,6 +674,425 @@
    "esperado": {
     "total_deducible": "0.03"
    }
+  },
+  {
+   "situacion": "ISP con tipo del 10 % indicado en la propia factura (por factura, no global)",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "tipo_isp": "10"
+    }
+   },
+   "esperado": {
+    "total_devengado": "100.00",
+    "total_deducible": "100.00",
+    "resultado": "0.00",
+    "cuota_isp": "100.00"
+   }
+  },
+  {
+   "situacion": "ISP con un tipo dudoso (15 %): pendiente, no suma",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "tipo_isp": "15"
+    }
+   },
+   "esperado": {
+    "total_devengado": "0",
+    "total_deducible": "0",
+    "resultado": "0",
+    "pendientes": [
+     1
+    ],
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "ISP a nombre de otra persona: pendiente, no suma",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "11111111H",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_devengado": "0",
+    "total_deducible": "0",
+    "resultado": "0",
+    "pendientes": [
+     1
+    ],
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "ISP a nombre de mi negocio (otro NIF declarado como propio): vale",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "isp",
+     "estado": "confirmada",
+     "emisor_nif": "DE123456789",
+     "receptor_nif": "B12345674",
+     "lineas": [
+      [
+       "1000.00",
+       "0",
+       "0.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total"
+    }
+   },
+   "nifs_negocio": [
+    "B12345674"
+   ],
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "210.00",
+    "resultado": "0.00",
+    "facturas_incluidas": [
+     1
+    ]
+   }
+  },
+  {
+   "situacion": "Se usa la cuota que figura en la factura, sin recalcularla (1000 al 21 % con cuota 209,99)",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-04-15",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "209.99"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_devengado": "0",
+    "total_deducible": "209.99",
+    "resultado": "-209.99"
+   }
+  },
+  {
+   "situacion": "Fecha de devengo corregida por factura: emitida fechada en junio, devengo en julio, sale del 2T",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-06-30",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "fechas_devengo": {
+    "1": "2026-07-02"
+   },
+   "esperado": {
+    "total_devengado": "0",
+    "total_deducible": "0",
+    "resultado": "0",
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "Fecha de devengo corregida por factura: emitida fechada en marzo, devengo en abril, entra en el 2T",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "emitida",
+     "fecha": "2026-03-31",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "87654321X",
+     "receptor_nif": "12345678Z",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {},
+   "fechas_devengo": {
+    "1": "2026-04-01"
+   },
+   "esperado": {
+    "total_devengado": "210.00",
+    "total_deducible": "0",
+    "resultado": "210.00",
+    "facturas_incluidas": [
+     1
+    ]
+   }
+  },
+  {
+   "situacion": "Factura recibida con retraso: fechada en 1T pero recibida en abril, se deduce en el 2T",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-03-20",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "fecha_recepcion": "2026-04-10"
+    }
+   },
+   "esperado": {
+    "total_deducible": "210.00",
+    "resultado": "-210.00",
+    "facturas_incluidas": [
+     1
+    ],
+    "de_periodos_anteriores": []
+   }
+  },
+  {
+   "situacion": "Factura del 1T recibida en 1T y no deducida entonces: solo entra en el 2T si el usuario lo elige",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-03-20",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total"
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "resultado": "0",
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "Igual, pero el usuario elige deducirla en el 2T (dentro de 4 años): entra y se marca como de periodo anterior",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-03-20",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "deducir_en": [
+      2026,
+      2
+     ]
+    }
+   },
+   "esperado": {
+    "total_deducible": "210.00",
+    "resultado": "-210.00",
+    "facturas_incluidas": [
+     1
+    ],
+    "de_periodos_anteriores": [
+     1
+    ]
+   }
+  },
+  {
+   "situacion": "Factura de hace más de 4 años (devengo 2022-03-20) en el 2T de 2026: caduca, no deduce",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2022-03-20",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "deducir_en": [
+      2026,
+      2
+     ]
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "resultado": "0",
+    "no_deducidas": [
+     1
+    ],
+    "facturas_incluidas": []
+   }
+  },
+  {
+   "situacion": "Pedir deducir una factura en un trimestre anterior a su recepción: pendiente, no suma",
+   "facturas": [
+    {
+     "id": 1,
+     "tipo": "recibida",
+     "fecha": "2026-03-20",
+     "clasificacion_iva": "general",
+     "estado": "confirmada",
+     "emisor_nif": "12345678Z",
+     "receptor_nif": "87654321X",
+     "lineas": [
+      [
+       "1000.00",
+       "21",
+       "210.00"
+      ]
+     ]
+    }
+   ],
+   "deducciones": {
+    "1": {
+     "afectacion": "total",
+     "fecha_recepcion": "2026-07-10",
+     "deducir_en": [
+      2026,
+      2
+     ]
+    }
+   },
+   "esperado": {
+    "total_deducible": "0",
+    "resultado": "0",
+    "pendientes": [
+     1
+    ],
+    "facturas_incluidas": []
+   }
   }
  ]
 }
