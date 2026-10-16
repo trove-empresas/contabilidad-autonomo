@@ -33,6 +33,7 @@ casos_validados/
 # 1. Actuales
 src/contabilidad_autonomo/clasificacion_iva.py
 src/contabilidad_autonomo/pendientes.py
+src/contabilidad_autonomo/deducciones.py
 docs/casos_propuestos/
 src/contabilidad_autonomo/fiscal/
 
