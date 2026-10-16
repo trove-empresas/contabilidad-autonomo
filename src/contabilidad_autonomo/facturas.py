@@ -56,6 +56,23 @@ _MIGRACIONES = [
     );
     CREATE INDEX idx_facturas_fecha ON facturas(fecha);
     """,
+    # v2 (issue #27): lo que el usuario declara de cada factura recibida para
+    # poder deducirla en el modelo 303. Tabla aparte: no toca las facturas.
+    """
+    CREATE TABLE datos_deduccion (
+        factura_id INTEGER PRIMARY KEY
+            REFERENCES facturas(id) ON DELETE CASCADE,
+        afectacion TEXT NOT NULL
+            CHECK (afectacion IN ('total', 'vehiculo_50', 'ninguna')),
+        simplificada INTEGER NOT NULL DEFAULT 0 CHECK (simplificada IN (0, 1)),
+        tipo_isp TEXT,
+        fecha_recepcion TEXT,
+        fecha_devengo TEXT,
+        deducir_anio INTEGER,
+        deducir_trimestre INTEGER CHECK (deducir_trimestre BETWEEN 1 AND 4),
+        CHECK ((deducir_anio IS NULL) = (deducir_trimestre IS NULL))
+    );
+    """,
 ]
 VERSION_ESQUEMA = len(_MIGRACIONES)
 

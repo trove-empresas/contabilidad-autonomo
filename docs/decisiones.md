@@ -175,3 +175,20 @@ Aplicada en la misma PR. Sigue pendiente de validación.
    - Elegir un trimestre anterior a la recepción: **pendiente**.
 5. **Afectación:** debe guardarse en la base de datos antes de cerrar la v1.
    Issue creada: ver el enlace en la PR #26. Mientras tanto se pasa en memoria.
+
+## Guardar la afectación y los datos de deducción en la base (issue #27)
+
+Decisiones del agente (reversibles; pendientes de que Gonzalo las vea):
+
+- **Tabla aparte `datos_deduccion`** (migración a la versión 2 del esquema), una
+  fila por factura recibida, en vez de columnas nuevas en `facturas`: no toca
+  las facturas existentes y una factura sin fila sigue siendo **pendiente** y
+  no suma en el 303.
+- Se guarda: afectación (`total` / `vehiculo_50` / `ninguna`), si es
+  simplificada, tipo de ISP, fecha de recepción, fecha de devengo corregida y
+  trimestre elegido para deducir (los cuatro últimos, opcionales).
+- Solo se admiten facturas **recibidas** (una emitida no lleva afectación).
+- `deducciones.calcular_303_guardado` pasa al cálculo todas las facturas
+  guardadas hasta el año pedido (las tardías pueden deducirse hasta 4 años
+  después); el cálculo en sí no cambia.
+- Borrar una factura borra sus datos de deducción (`ON DELETE CASCADE`).
