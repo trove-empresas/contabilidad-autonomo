@@ -19,6 +19,29 @@ cambia, se añade una nueva que la sustituye y se indica en ambas.
 
 ## Decisiones
 
+## 2026-11-06 — Modelo 130: supuestos del cálculo (propuesta de un agente)
+
+- **Decisión:** `modelo_130.py` calcula el pago como el 20 % del rendimiento
+  neto acumulado del año, menos los pagos de trimestres anteriores y las
+  retenciones acumuladas (art. 110 RIRPF). Supuestos tomados por el agente,
+  **pendientes de validar por Gonzalo**: (1) la fecha de la factura es la de
+  imputación; (2) rendimiento negativo = 20 % de 0; (3) pagos anteriores
+  calculados con las mismas reglas salvo que se indiquen; (4) exención
+  desconocida («no lo sé») si faltan las facturas del año anterior, no hubo
+  ingresos o quedan pendientes de confirmar; (5) la exención del art. 109.2
+  solo se aplica si la actividad es profesional (dato que se declara); (6) los
+  gastos son la base de las facturas recibidas por la proporción que declara
+  el usuario; (7) no se aplican la minoración del art. 110.3.c ni la deducción
+  del art. 110.3.d, ni gastos sin factura: el pago puede salir mayor que el real.
+- **Motivo:** principio 3 de CLAUDE.md (sin datos, «no lo sé») y preferir
+  pagar de más en el cálculo a quedarse corto.
+- **Alternativas descartadas:**
+  - Suponer exención cuando falta el año anterior: podría hacer no presentar
+    un modelo obligatorio.
+  - Reutilizar la afectación de IVA para los gastos de IRPF: son reglas
+    distintas (p. ej. el 50 % de vehículos es de IVA).
+- **Estado:** vigente hasta que Gonzalo valide `docs/casos_propuestos/modelo_130.json`.
+
 ## 2026-09-24 — La clave de API de Anthropic va en `.env`
 
 - **Decisión:** la app lee la clave de la variable `ANTHROPIC_API_KEY`, que
