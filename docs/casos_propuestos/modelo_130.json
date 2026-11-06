@@ -1,0 +1,855 @@
+{
+ "aviso": "PROPUESTAS de un agente, NO validadas por Gonzalo. No son casos_validados/. Todos los datos son ficticios.",
+ "casos": [
+  {
+   "situacion": "T1: ingresos 10000 con retención 1500, gastos 2000; año anterior con 50 % retenido (no exento)",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "ingresos": "10000.00",
+    "gastos": "2000.00",
+    "rendimiento_neto": "8000.00",
+    "veinte_por_ciento": "1600.00",
+    "pagos_anteriores": "0",
+    "retenciones": "1500.00",
+    "resultado_bruto": "100.00",
+    "a_ingresar": "100.00",
+    "incompleto": false
+   }
+  },
+  {
+   "situacion": "T2: acumulado entre trimestres; el pago del T1 (1600) se descuenta",
+   "anio": 2026,
+   "trimestre": 2,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "0",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "10000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-01-15",
+     "base": "10000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-02-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-05-10",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-05-02",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "ingresos": "15000.00",
+    "gastos": "3000.00",
+    "rendimiento_neto": "12000.00",
+    "veinte_por_ciento": "2400.00",
+    "pagos_anteriores": "1600.00",
+    "resultado_bruto": "800.00",
+    "a_ingresar": "800.00"
+   }
+  },
+  {
+   "situacion": "T3: retenciones acumuladas de todo el año y pagos anteriores encadenados (500 + 500)",
+   "anio": 2026,
+   "trimestre": 3,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "0",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "10000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-01-20",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-04-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-08-01",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "ingresos": "30000.00",
+    "veinte_por_ciento": "6000.00",
+    "pagos_anteriores": "1000.00",
+    "retenciones": "4500.00",
+    "resultado_bruto": "500.00",
+    "a_ingresar": "500.00"
+   }
+  },
+  {
+   "situacion": "Exención: justo el 70 % de los ingresos del año anterior con retención",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "7000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "3000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "exento",
+    "a_ingresar": "0.00",
+    "resultado_bruto": "100.00"
+   }
+  },
+  {
+   "situacion": "Sin exención: 69,99 % de los ingresos del año anterior con retención",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "6999.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "3001.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "a_ingresar": "100.00"
+   }
+  },
+  {
+   "situacion": "Año anterior desconocido: «no lo sé», no se supone",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": null,
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "no_se",
+    "a_ingresar": null,
+    "veinte_por_ciento": "1600.00"
+   }
+  },
+  {
+   "situacion": "Año anterior sin ningún ingreso (posible inicio de actividad): «no lo sé»",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "no_se",
+    "a_ingresar": null
+   }
+  },
+  {
+   "situacion": "Año anterior con una factura emitida pendiente: «no lo sé»",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "7000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "3000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-11-01",
+     "base": "500.00",
+     "retencion": "0",
+     "estado": "pendiente"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "no_se",
+    "a_ingresar": null
+   }
+  },
+  {
+   "situacion": "Actividad no profesional con 90 % retenido el año anterior: no hay exención (art. 109.2)",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "9000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": false,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "a_ingresar": "100.00"
+   }
+  },
+  {
+   "situacion": "Una factura emitida pendiente no suma y el resultado queda incompleto",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-03-15",
+     "base": "2000.00",
+     "retencion": "300.00",
+     "estado": "pendiente"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "ingresos": "10000.00",
+    "a_ingresar": "100.00",
+    "incompleto": true,
+    "pendientes": 1
+   }
+  },
+  {
+   "situacion": "Recibida confirmada sin proporción declarada: no suma y el resultado queda incompleto",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-20",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "gastos": "2000.00",
+    "a_ingresar": "100.00",
+    "incompleto": true,
+    "sin_datos_gasto": 1
+   }
+  },
+  {
+   "situacion": "Gastos mayores que ingresos: rendimiento negativo, el 20 % es 0",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-01",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-02-02",
+     "base": "3000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "rendimiento_neto": "-2000.00",
+    "veinte_por_ciento": "0.00",
+    "resultado_bruto": "0.00",
+    "a_ingresar": "0.00"
+   }
+  },
+  {
+   "situacion": "Retenciones mayores que el 20 %: no se ingresa nada y el bruto queda negativo",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-01",
+     "base": "10000.00",
+     "retencion": "2500.00",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "estado": "calculado",
+    "veinte_por_ciento": "2000.00",
+    "resultado_bruto": "-500.00",
+    "a_ingresar": "0.00"
+   }
+  },
+  {
+   "situacion": "Gasto afecto al 50 %",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-02-02",
+     "base": "1001.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "0.5"
+    }
+   ],
+   "esperado": {
+    "gastos": "500.50",
+    "rendimiento_neto": "4499.50",
+    "veinte_por_ciento": "899.90",
+    "a_ingresar": "899.90"
+   }
+  },
+  {
+   "situacion": "T2 con pagos anteriores indicados por el usuario (300) en vez de calculados",
+   "anio": 2026,
+   "trimestre": 2,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "0",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "10000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": "300.00",
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-01-15",
+     "base": "10000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-02-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-05-10",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-05-02",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    }
+   ],
+   "esperado": {
+    "pagos_anteriores": "300.00",
+    "a_ingresar": "2100.00"
+   }
+  },
+  {
+   "situacion": "Una factura de un trimestre posterior no entra",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-10",
+     "base": "10000.00",
+     "retencion": "1500.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "recibida",
+     "fecha": "2026-03-01",
+     "base": "2000.00",
+     "retencion": "0",
+     "estado": "confirmada",
+     "proporcion": "1"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2026-04-02",
+     "base": "99999.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "ingresos": "10000.00",
+    "a_ingresar": "100.00"
+   }
+  },
+  {
+   "situacion": "Redondeo: el 20 % de 0,03 € (0,006) se redondea a 0,01 €",
+   "anio": 2026,
+   "trimestre": 1,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-02-01",
+     "base": "0.03",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "veinte_por_ciento": "0.01",
+    "a_ingresar": "0.01"
+   }
+  },
+  {
+   "situacion": "Una factura del año siguiente o del anterior no entra en el año",
+   "anio": 2026,
+   "trimestre": 4,
+   "anterior": [
+    {
+     "tipo": "emitida",
+     "fecha": "2025-03-01",
+     "base": "5000.00",
+     "retencion": "1.00",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-09-01",
+     "base": "5000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "actividad_profesional": true,
+   "pagos_anteriores": null,
+   "facturas": [
+    {
+     "tipo": "emitida",
+     "fecha": "2026-12-31",
+     "base": "1000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2025-12-31",
+     "base": "50000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    },
+    {
+     "tipo": "emitida",
+     "fecha": "2027-01-01",
+     "base": "50000.00",
+     "retencion": "0",
+     "estado": "confirmada"
+    }
+   ],
+   "esperado": {
+    "ingresos": "1000.00",
+    "a_ingresar": "200.00"
+   }
+  }
+ ]
+}
